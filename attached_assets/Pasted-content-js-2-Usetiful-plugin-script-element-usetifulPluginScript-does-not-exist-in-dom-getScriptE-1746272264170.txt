@@ -1,0 +1,53 @@
+content.js:2 Usetiful plugin: script element #usetifulPluginScript does not exist in dom.
+getScriptElement @ content.js:2
+content.js:2 [DEPRECATED] Default export is deprecated. Instead use `import { create } from 'zustand'`.
+(anonymous) @ content.js:2
+index-DxRrohcI.js:248 Verificando autenticação...
+dashboard:1 Denying load of chrome-extension://fhamhppabjaafimidmelnmpfangjdnhj/icons/pin-32.png. Resources must be listed in the web_accessible_resources manifest key in order to be loaded by pages outside the extension.
+content.js:1 [MindStudio][Content] Initializing content script
+index.js:1 content loaded
+chrome-extension://invalid/:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+pinComponent.js:2 Empty token!
+Ir @ pinComponent.js:2
+pinComponent.js:2 
+            
+            
+           Uncaught (in promise) TypeError: Failed to fetch
+    at pinComponent.js:2:468830
+    at pinComponent.js:2:772132
+    at pinComponent.js:2:772135
+dashboard:1 Denying load of chrome-extension://acbjeolbnaiecolebdcopocflkljjmhi/sdk.js. Resources must be listed in the web_accessible_resources manifest key in order to be loaded by pages outside the extension.
+chrome-extension://invalid/:1 
+            
+            
+           Failed to load resource: net::ERR_FAILED
+pinComponent.js:2 PIN Company Discounts Provider: Error: Invalid data
+(anonymous) @ pinComponent.js:2
+index.59b2ae62.js:3 Content Script: Initializing
+index-DxRrohcI.js:248 Usuário autenticado: Object
+api/events/date?userId=1&date=2025-05-03:1 
+            
+            
+           Failed to load resource: the server responded with a status of 403 ()
+index-DxRrohcI.js:248 Acesso negado ao buscar eventos. Verificando autenticação.
+queryFn @ index-DxRrohcI.js:248
+preferences:1 Unchecked runtime.lastError: The message port closed before a response was received.
+preferences:1 Unchecked runtime.lastError: The message port closed before a response was received.
+pinComponent.js:2 PIN Company Discounts Provider: Error: Invalid data
+(anonymous) @ pinComponent.js:2
+d @ pinComponent.js:2
+(anonymous) @ pinComponent.js:2
+(anonymous) @ pinComponent.js:2
+m @ pinComponent.js:2
+a @ pinComponent.js:2
+(anonymous) @ pinComponent.js:2
+(anonymous) @ pinComponent.js:2
+(anonymous) @ pinComponent.js:2
+ol @ pinComponent.js:2
+Eu @ pinComponent.js:2
+(anonymous) @ pinComponent.js:2
+w @ pinComponent.js:2
+R @ pinComponent.js:2

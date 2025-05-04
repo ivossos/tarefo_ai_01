@@ -1,0 +1,17 @@
+{
+  "name": "tarefo-ai-whatsapp-webhook",
+  "version": "1.0.0",
+  "description": "Webhook para integração do WhatsApp com o Tarefo AI",
+  "main": "index.js",
+  "scripts": {
+    "start": "functions-framework --target=whatsappWebhook"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.1.0",
+    "@google-cloud/secret-manager": "^4.2.0",
+    "axios": "^1.4.0"
+  }
+}

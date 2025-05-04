@@ -1,0 +1,7 @@
+crewai
+langchain
+python-dotenv
+pydantic
+pillow
+pyyaml
+python-telegram-bot

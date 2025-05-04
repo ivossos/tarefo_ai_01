@@ -1,0 +1,85 @@
+tasks:
+  # Tarefas para o Agente de Mensagens
+  - description: "setup_chat_channels"
+    expected_output: "Messages successfully exchanged and confirmed via both platforms with logs."
+    agent: "Messaging Integration Specialist"
+    context:
+      - "Configure and validate real-time messaging on WhatsApp (via Twilio Z-API) and Telegram (BotFather)."
+      - "Test message exchange, command parsing, and webhook reliability."
+    async_execution: false
+
+  - description: "Processar mensagem recebida do usuário"
+    expected_output: "Mensagem processada e entregue para o agente apropriado, ou resposta enviada ao usuário"
+    agent: "Messaging Integration Specialist"
+    context:
+      - "A mensagem pode vir de diferentes plataformas (Telegram, WhatsApp)"
+      - "O formato pode ser texto, áudio ou imagem"
+    async_execution: false
+
+  # Tarefas para o Agente de Calendário
+  - description: "calendar_integration"
+    expected_output: "≥98% sync accuracy validated through 2-way sync tests."
+    agent: "Calendar Integration Engineer"
+    context:
+      - "Implement and verify calendar integration with Google (OAuth) and Apple Calendar (CalDAV)."
+      - "Focus on correct sync behavior for create, update, and delete actions."
+    async_execution: true
+
+  - description: "Agendar novo evento"
+    expected_output: "Evento agendado no calendário do usuário e confirmação enviada"
+    agent: "Calendar Integration Engineer"
+    context:
+      - "Verificar conflitos de agenda"
+      - "Sugerir horários alternativos se necessário"
+    async_execution: false
+
+  # Tarefas para o Agente de Lembretes
+  - description: "reminder_notifications"
+    expected_output: ">99% reminder delivery success rate and user confirmation logs."
+    agent: "Reminder and Notification Coordinator"
+    context:
+      - "Deliver user-defined reminders across chat, email (SendGrid), and SMS (Twilio)."
+      - "Include configurable timing and repeat behavior."
+    async_execution: true
+
+  - description: "Criar novo lembrete"
+    expected_output: "Lembrete criado e agendado com sucesso"
+    agent: "Reminder and Notification Coordinator"
+    context:
+      - "Extrair data, hora e detalhes do lembrete"
+      - "Confirmar criação com o usuário"
+    async_execution: false
+
+  # Tarefas para o Agente de OCR
+  - description: "ocr_processing"
+    expected_output: "JSON with fields: vendor, amount, date, category, and language detected."
+    agent: "Document Processing Specialist"
+    context:
+      - "Accept image uploads of receipts (JPG, PNG, PDF) and convert to structured data."
+      - "Handle Portuguese and English OCR parsing with basic fallback flows."
+    async_execution: false
+
+  - description: "Extrair informações de imagem/documento"
+    expected_output: "Dados estruturados extraídos da imagem"
+    agent: "Document Processing Specialist"
+    context:
+      - "A imagem pode ser um recibo, fatura ou documento"
+      - "Extrair informações relevantes como datas, valores, categorias"
+    async_execution: false
+
+  # Tarefas para o Agente de Compliance
+  - description: "compliance_validation"
+    expected_output: "Complete compliance checklist passed with supporting logs and config proofs."
+    agent: "Privacy and Security Officer"
+    context:
+      - "Audit all authentication and data processing flows for LGPD/GDPR compliance."
+      - "Check RBAC access rules, encryption in transit and at rest, and user consent logging."
+    async_execution: false
+
+  - description: "Verificar conformidade da operação com LGPD/GDPR"
+    expected_output: "Relatório de conformidade e recomendações"
+    agent: "Privacy and Security Officer"
+    context:
+      - "Verificar se a operação envolve dados pessoais sensíveis"
+      - "Garantir que o consentimento apropriado foi obtido"
+    async_execution: false

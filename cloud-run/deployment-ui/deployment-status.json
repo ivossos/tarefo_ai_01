@@ -1,0 +1,15 @@
+{
+  "project_setup": "success",
+  "apis_enabled": "success",
+  "database_creation": "running",
+  "secrets_config": "pending",
+  "container_build": "pending",
+  "cloud_run_deploy": "pending",
+  "cloud_functions_deploy": "pending",
+  "webhook_config": "pending",
+  "final_verification": "pending",
+  "service_url": "",
+  "webhook_url": "",
+  "function_url": "",
+  "last_updated": "2025-05-04T02:45:51Z"
+}

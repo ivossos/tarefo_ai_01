@@ -1,0 +1,27 @@
+Tarefo AI - Arquitetura e Funcionamento
+1. Introdução
+Tarefo AI é um assistente pessoal inteligente desenvolvido para funcionar dentro de aplicativos de mensagens como WhatsApp e Telegram, além de um painel web leve. Seu objetivo é ajudar os usuários a organizarem suas tarefas diárias, como compromissos, lembretes de pagamentos e visibilidade das finanças, tudo de forma simples e sem a necessidade de instalar um novo aplicativo.
+
+A ideia é tornar a vida das pessoas mais organizada, especialmente aquelas com dificuldades em manter a rotina, como pessoas com TDAH, freelancers e profissionais multitarefas.
+
+2. O que é CrewAI?
+CrewAI é uma estrutura que permite criar equipes de agentes inteligentes que trabalham juntos para atingir objetivos. Ao invés de ter um único sistema, CrewAI organiza a inteligência artificial em agentes, onde cada um tem uma função específica.
+
+Esses agentes trabalham de maneira colaborativa para resolver problemas mais complexos e dar uma resposta mais eficiente ao usuário.
+
+No caso do Tarefo AI, a CrewAI permite dividir as responsabilidades em agentes, como o Agente de Calendário, Agente de Mensagens, Agente de Lembretes, Agente de OCR e Agente de Compliance. Cada um tem um papel muito claro e, juntos, fazem o Tarefo AI funcionar perfeitamente.
+
+3. Arquitetura do Sistema
+A arquitetura do Tarefo AI foi construída para ser modular, o que significa que cada agente tem sua própria responsabilidade dentro do sistema, mas todos trabalham em conjunto para fornecer uma experiência fluida ao usuário.
+
+Agente de Mensagens (ChatOps): Responsável pela comunicação com o usuário via WhatsApp ou Telegram.
+Agente de Calendário: Sincroniza e gerencia os eventos do usuário entre o Tarefo AI e os serviços de calendário como Google Calendar e Apple Calendar.
+Agente de Lembretes: Envia lembretes para o usuário através de mensagens, e-mail ou SMS.
+Agente de OCR: Extrai dados de imagens de recibos e faturas enviadas pelo usuário.
+Agente de Compliance: Garante que o sistema esteja em conformidade com as leis de proteção de dados como LGPD e GDPR.
+Cada agente é responsável por uma parte específica do sistema, mas todos estão conectados em um fluxo único e eficiente que permite ao usuário realizar suas tarefas com facilidade.
+
+4. Diagrama de Arquitetura
+Aqui está o diagrama representando a arquitetura do sistema Tarefo AI. Ele mostra como os agentes estão interligados e como as tarefas são distribuídas entre eles.
+
+[INSERIR DIAGRAMA AQUI]

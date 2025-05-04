@@ -1,0 +1,40 @@
+name: Deploy TarefoAI to Cloud Run
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: tarefoai
+      
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+      
+      - name: Enable required APIs
+        run: |
+          gcloud services enable cloudbuild.googleapis.com
+          gcloud services enable run.googleapis.com
+          gcloud services enable secretmanager.googleapis.com
+          gcloud services enable cloudfunctions.googleapis.com
+      
+      - name: Deploy using Cloud Build
+        run: |
+          gcloud builds submit --config cloudbuild.yaml --substitutions=_REGION=southamerica-east1,_SERVICE_NAME=tarefo-ai
