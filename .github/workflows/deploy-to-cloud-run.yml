@@ -18,23 +18,55 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
+      - name: Google Auth
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+      
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: tarefoai
       
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
-      
       - name: Enable required APIs
         run: |
           gcloud services enable cloudbuild.googleapis.com
           gcloud services enable run.googleapis.com
-          gcloud services enable secretmanager.googleapis.com
+          gcloud services enable artifactregistry.googleapis.com
           gcloud services enable cloudfunctions.googleapis.com
       
-      - name: Deploy using Cloud Build
-        run:
-          gcloud builds submit --config cloudbuild.yaml --substitutions=_REGION=southamerica-east1,_SERVICE_NAME=tarefo-ai,_ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}
+      - name: Deploy using Cloud Build with retry
+        run: |
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          WAIT_TIME=60  # Espera inicial em segundos
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            echo "Tentativa $((RETRY_COUNT+1)) de $MAX_RETRIES para submeter build..."
+            
+            if gcloud builds submit --config cloudbuild.yaml --substitutions=_REGION=southamerica-east1,_SERVICE_NAME=tarefo-ai,_ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}; then
+              echo "✅ Build submetido com sucesso!"
+              break
+            else
+              ERROR_CODE=$?
+              RETRY_COUNT=$((RETRY_COUNT+1))
+              
+              if [[ $ERROR_CODE -eq 1 && $(grep -c "RESOURCE_EXHAUSTED: Quota exceeded" /dev/stderr) -gt 0 ]]; then
+                if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                  echo "⚠️ Quota excedida no Cloud Build. Tentativa $RETRY_COUNT de $MAX_RETRIES."
+                  echo "🕒 Aguardando $WAIT_TIME segundos antes da próxima tentativa..."
+                  sleep $WAIT_TIME
+                  WAIT_TIME=$((WAIT_TIME*2))  # Backoff exponencial
+                else
+                  echo "❌ Falha após $MAX_RETRIES tentativas devido a limites de quota."
+                  echo "📝 Considere solicitar um aumento de quota em: https://cloud.google.com/docs/quotas/help/request_increase"
+                  exit 1
+                fi
+              else
+                echo "❌ Falha ao submeter build com erro não relacionado a quota. Abortando."
+                exit $ERROR_CODE
+              fi
+            fi
+          done
