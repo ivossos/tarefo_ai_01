@@ -1,5 +1,5 @@
 name: Deploy TarefoAI to Cloud Run
-c
+
 on:
   push:
     branches: [ main ]
