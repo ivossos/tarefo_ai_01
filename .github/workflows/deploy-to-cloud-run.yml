@@ -48,21 +48,22 @@ jobs:
           while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
             echo "Tentativa $((RETRY_COUNT+1)) de $MAX_RETRIES para submeter build..."
             
-            if gcloud builds submit --config cloudbuild.yaml --substitutions=_REGION=southamerica-east1,_SERVICE_NAME=tarefo-ai,_ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }} --polling-interval=30s --verbosity=warning; then
+            if gcloud builds submit --config cloudbuild.yaml --substitutions=_REGION=southamerica-east1,_SERVICE_NAME=tarefo-ai,_ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }} --polling-interval=30 --verbosity=warning; then
               echo "✅ Build submetido com sucesso!"
               break
             else
               ERROR_CODE=$?
               RETRY_COUNT=$((RETRY_COUNT+1))
               
-              if [[ $ERROR_CODE -eq 1 && $(grep -c "RESOURCE_EXHAUSTED: Quota exceeded" /dev/stderr) -gt 0 ]]; then
+              # Sempre tenta novamente se for um erro de saída 1 (comum para erros de quota)
+              if [[ $ERROR_CODE -eq 1 ]]; then
                 if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
-                  echo "⚠️ Quota excedida no Cloud Build. Tentativa $RETRY_COUNT de $MAX_RETRIES."
+                  echo "⚠️ Erro no Cloud Build (possivelmente quota excedida). Tentativa $RETRY_COUNT de $MAX_RETRIES."
                   echo "🕒 Aguardando $WAIT_TIME segundos antes da próxima tentativa..."
                   sleep $WAIT_TIME
                   WAIT_TIME=$((WAIT_TIME*2))  # Backoff exponencial
                 else
-                  echo "❌ Falha após $MAX_RETRIES tentativas devido a limites de quota."
+                  echo "❌ Falha após $MAX_RETRIES tentativas devido a erros persistentes."
                   echo "📝 Considere solicitar um aumento de quota em: https://cloud.google.com/docs/quotas/help/request_increase"
                   exit 1
                 fi
