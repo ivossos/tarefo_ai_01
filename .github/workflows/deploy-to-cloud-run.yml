@@ -1,5 +1,5 @@
 name: Deploy TarefoAI to Cloud Run
-
+c
 on:
   push:
     branches: [ main ]
@@ -43,12 +43,12 @@ jobs:
         run: |
           MAX_RETRIES=5
           RETRY_COUNT=0
-          WAIT_TIME=60  # Espera inicial em segundos
+          WAIT_TIME=180  # Espera inicial em segundos (3 minutos)
           
           while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
             echo "Tentativa $((RETRY_COUNT+1)) de $MAX_RETRIES para submeter build..."
             
-            if gcloud builds submit --config cloudbuild.yaml --substitutions=_REGION=southamerica-east1,_SERVICE_NAME=tarefo-ai,_ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}; then
+            if gcloud builds submit --config cloudbuild.yaml --substitutions=_REGION=southamerica-east1,_SERVICE_NAME=tarefo-ai,_ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }} --polling-interval=30s --verbosity=warning; then
               echo "✅ Build submetido com sucesso!"
               break
             else
