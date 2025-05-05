@@ -1,5 +1,5 @@
 name: Deploy TarefoAI to Cloud Run
-
+c
 on:
   push:
     branches: [ main ]
@@ -18,17 +18,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: Google Auth
-        id: auth
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
-      
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: tarefoai
+      
+      - name: Manual Google Auth
+        run: |
+          # Criar arquivo temporário com as credenciais
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > /tmp/gcp-credentials.json
+          # Autenticar usando o arquivo de credenciais
+          gcloud auth activate-service-account --key-file=/tmp/gcp-credentials.json
+          # Definir projeto ativo
+          gcloud config set project tarefoai
       
       - name: Enable required APIs
         run: |
