@@ -1,11 +1,11 @@
 steps:
-  # Instalar dependências Node.js
+  # Instalar dependencias Node.js
   - name: 'node:18'
     entrypoint: npm
     args: ['install']
     id: 'install-deps'
   
-  # Instalar dependências Python
+  # Instalar dependencias Python
   - name: 'python:3.9'
     entrypoint: pip
     args: ['install', '-r', 'requirements.txt']
@@ -74,3 +74,4 @@ images:
 
 # Timeout do build (30 minutos)
 timeout: '1800s'
+
