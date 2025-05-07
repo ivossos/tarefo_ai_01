@@ -1,0 +1,77 @@
+steps:
+  # Instalar dependencias Node.js
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['install']
+    id: 'install-deps'
+  
+  # Instalar dependencias Python
+  - name: 'python:3.9'
+    entrypoint: pip
+    args: ['install', '-r', 'requirements.txt']
+    id: 'install-python-deps'
+    waitFor: ['install-deps']
+  
+  # Executar testes (opcional)
+  - name: 'node:18'
+    entrypoint: npm
+    args: ['test']
+    id: 'run-tests'
+    waitFor: ['install-deps']
+  
+  # Construir o container
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'gcr.io/$PROJECT_ID/tarefo-ai:$COMMIT_SHA',
+      '.'
+    ]
+    id: 'build-container'
+  
+  # Push para Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/tarefo-ai:$COMMIT_SHA']
+    id: 'push-container'
+    waitFor: ['build-container']
+  
+  # Deploy no Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run', 'deploy', '${_SERVICE_NAME}',
+      '--image', 'gcr.io/$PROJECT_ID/tarefo-ai:$COMMIT_SHA',
+      '--region', '${_REGION}',
+      '--platform', 'managed',
+      '--allow-unauthenticated',
+      '--memory', '1Gi',
+      '--cpu', '1',
+      '--min-instances', '0',
+      '--max-instances', '2',
+      '--set-env-vars', 'NODE_ENV=production,ANTHROPIC_API_KEY=${_ANTHROPIC_API_KEY}'
+    ]
+    id: 'deploy-cloud-run'
+    waitFor: ['push-container']
+
+  # Deploy da Cloud Function webhook
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'functions', 'deploy', 'tarefo-ai-webhook',
+      '--region', '${_REGION}',
+      '--runtime', 'nodejs18',
+      '--trigger-http',
+      '--source', 'webhook-function',
+      '--memory', '256MB',
+      '--timeout', '60s',
+      '--allow-unauthenticated'
+    ]
+    id: 'deploy-webhook'
+    waitFor: ['deploy-cloud-run']
+
+# Imagens para push
+images:
+  - 'gcr.io/$PROJECT_ID/tarefo-ai:$COMMIT_SHA'
+
+# Timeout do build (30 minutos)
+timeout: '1800s'
+
